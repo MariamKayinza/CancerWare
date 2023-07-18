@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Intent;
 
-public class Scan extends AppCompatActivity {
+public class DiagnosisActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView textView;
@@ -17,29 +17,29 @@ public class Scan extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_diagnosis);
 
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
         button = findViewById(R.id.button);
 
-        // Set the image for the scan disease page
+        // Set the image for the diagnosis page
         int imageResource = R.drawable.cancerware;
         imageView.setImageResource(imageResource);
 
-        // Set the text for the scan disease page
-        String text = "Scan Disease";
+        // Set the text for the diagnosis page
+        String text = "DiagnosisActivity";
         textView.setText(text);
 
-        // Set the button text for the scan disease page
-        String buttonText = "Start Scan";
+        // Set the button text for the diagnosis page
+        String buttonText = "See Doctor";
         button.setText(buttonText);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Start the scan process
-                Intent intent = new Intent(Scan.this, Diagnosis.class);
+                // Go to the doctor
+                Intent intent = new Intent(DiagnosisActivity.this, NearbyClinicActivity.class);
                 startActivity(intent);
             }
         });

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class home extends AppCompatActivity {
+public class homeActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView textView;
@@ -18,30 +18,31 @@ public class home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
+
 
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
         button = findViewById(R.id.button);
 
-        // Set the image for the home page
+        // Set the image for the homeActivity page
         int imageResource = R.drawable.cancerware;
         imageView.setImageResource(imageResource);
 
-        // Set the text for the home page
-        String text = "Welcome to the Skin Cancer Diagnosis App!";
+        // Set the text for the homeActivity page
+        String text = "Welcome to the Skin Cancer DiagnosisActivity App!";
         textView.setText(text);
 
-        // Set the button text for the home page
-        String buttonText = "Start Diagnosis";
+        // Set the button text for the homeActivity page
+        String buttonText = "Check if you are Skin Cancer Free";
         button.setText(buttonText);
 
-        // Set the button listener for the home page
+        // Set the button listener for the homeActivity page
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Start the diagnosis process
-                Intent intent = new Intent(home.this, Diagnosis.class);
+                Intent intent = new Intent(homeActivity.this, ScanActivity.class);
                 startActivity(intent);
             }
         });

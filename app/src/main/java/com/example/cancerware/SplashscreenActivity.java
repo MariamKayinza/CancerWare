@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.widget.ImageView;
 
-public class Splashscreen extends AppCompatActivity {
+public class SplashscreenActivity extends AppCompatActivity {
 
     private ImageView imageView;
 
@@ -27,7 +27,7 @@ public class Splashscreen extends AppCompatActivity {
             @Override
             public void run() {
                 // Start the main activity
-                Intent intent = new Intent(Splashscreen.this, home.class);
+                Intent intent = new Intent(SplashscreenActivity.this, homeActivity.class);
                 startActivity(intent);
 
                 // Finish the splash activity
