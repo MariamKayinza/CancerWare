@@ -18,8 +18,7 @@ public class homeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
+        setContentView(R.layout.activity_main);
 
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
@@ -34,7 +33,7 @@ public class homeActivity extends AppCompatActivity {
         textView.setText(text);
 
         // Set the button text for the homeActivity page
-        String buttonText = "Check if you are Skin Cancer Free";
+        String buttonText = "Start DiagnosisActivity";
         button.setText(buttonText);
 
         // Set the button listener for the homeActivity page
@@ -42,7 +41,7 @@ public class homeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the diagnosis process
-                Intent intent = new Intent(homeActivity.this, ScanActivity.class);
+                Intent intent = new Intent(homeActivity.this, DiagnosisActivity.class);
                 startActivity(intent);
             }
         });
