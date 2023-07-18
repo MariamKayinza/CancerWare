@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Button;
 
-public class SplashscreenActivity extends AppCompatActivity {
+public class StartScreen extends AppCompatActivity {
 
     private ImageView imageView;
     private Button button;
@@ -16,7 +16,7 @@ public class SplashscreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splashscreen);
+        setContentView(R.layout.activity_start_screen);
 
         button = findViewById(R.id.button);
         imageView = findViewById(R.id.imageView);
@@ -33,7 +33,7 @@ public class SplashscreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // home
-                Intent intent = new Intent(SplashscreenActivity.this, homeActivity.class);
+                Intent intent = new Intent(StartScreen.this, homeActivity.class);
                 startActivity(intent);
             }
         });
@@ -44,7 +44,7 @@ public class SplashscreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // Start the main activity
-                Intent intent = new Intent(SplashscreenActivity.this, homeActivity.class);
+                Intent intent = new Intent(StartScreen.this, homeActivity.class);
                 startActivity(intent);
 
                 // Finish the splash activity
