@@ -1,14 +1,15 @@
 package com.example.cancerware;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.content.Intent;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Intent;
 
-public class Scan extends AppCompatActivity {
+public class homeActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView textView;
@@ -17,29 +18,30 @@ public class Scan extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_main);
 
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
         button = findViewById(R.id.button);
 
-        // Set the image for the scan disease page
+        // Set the image for the homeActivity page
         int imageResource = R.drawable.cancerware;
         imageView.setImageResource(imageResource);
 
-        // Set the text for the scan disease page
-        String text = "Scan Disease";
+        // Set the text for the homeActivity page
+        String text = "Welcome to the Skin Cancer DiagnosisActivity App!";
         textView.setText(text);
 
-        // Set the button text for the scan disease page
-        String buttonText = "Start Scan";
+        // Set the button text for the homeActivity page
+        String buttonText = "Start DiagnosisActivity";
         button.setText(buttonText);
 
+        // Set the button listener for the homeActivity page
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Start the scan process
-                Intent intent = new Intent(Scan.this, Diagnosis.class);
+                // Start the diagnosis process
+                Intent intent = new Intent(homeActivity.this, DiagnosisActivity.class);
                 startActivity(intent);
             }
         });

@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -37,8 +37,8 @@ public class Login extends AppCompatActivity {
 
                 // Check if the username and password are valid
                 if (username.equals("admin") && password.equals("password")) {
-                    // Login the user
-                    Intent intent = new Intent(Login.this, home.class);
+                    // LoginActivity the user
+                    Intent intent = new Intent(LoginActivity.this, homeActivity.class);
                     startActivity(intent);
                 } else {
                     // Show an error message
@@ -53,7 +53,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Go to the register page
-                Intent intent = new Intent(Login.this, Register.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -62,7 +62,7 @@ public class Login extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this, Login.class);
+                Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

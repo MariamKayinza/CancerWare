@@ -6,9 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Intent;
 
-public class NearbyClinic extends AppCompatActivity {
+public class ClinicInformationActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView textView;
@@ -17,30 +16,29 @@ public class NearbyClinic extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nearby_clinic);
+        setContentView(R.layout.activity_clinic_information);
 
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
         button = findViewById(R.id.button);
 
-        // Set the image for the nearby clinic page
+        // Set the image for the clinic information page
         int imageResource = R.drawable.cancerware;
         imageView.setImageResource(imageResource);
 
-        // Set the text for the nearby clinic page
-        String text = "Nearby Clinics";
+        // Set the text for the clinic information page
+        String text = "Clinic Information";
         textView.setText(text);
 
-        // Set the button text for the nearby clinic page
-        String buttonText = "Find Clinics";
+        // Set the button text for the clinic information page
+        String buttonText = "Back";
         button.setText(buttonText);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Find nearby clinics
-                Intent intent = new Intent(NearbyClinic.this, NearbyClinic.class);
-                startActivity(intent);
+                // Go back to the homeActivity page
+                finish();
             }
         });
     }

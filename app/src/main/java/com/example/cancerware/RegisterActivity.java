@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -41,11 +41,11 @@ public class Register extends AppCompatActivity {
                     // Show an error message
                     errorTextView.setText("Please enter a username and password");
                 } else {
-                    // Register the user
+                    // RegisterActivity the user
                     // TODO: Save the username and password in the database
 
                     // Go to the login page
-                    Intent intent = new Intent(Register.this, Login.class);
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
             }
@@ -55,7 +55,7 @@ public class Register extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Register.this, home.class);
+                Intent intent = new Intent(RegisterActivity.this, homeActivity.class);
                 startActivity(intent);
             }
         });

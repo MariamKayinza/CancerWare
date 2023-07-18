@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Intent;
 
-public class Diagnosis extends AppCompatActivity {
+public class DiagnosisActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView textView;
@@ -28,7 +28,7 @@ public class Diagnosis extends AppCompatActivity {
         imageView.setImageResource(imageResource);
 
         // Set the text for the diagnosis page
-        String text = "Diagnosis";
+        String text = "DiagnosisActivity";
         textView.setText(text);
 
         // Set the button text for the diagnosis page
@@ -39,7 +39,7 @@ public class Diagnosis extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Go to the doctor
-                Intent intent = new Intent(Diagnosis.this, NearbyClinic.class);
+                Intent intent = new Intent(DiagnosisActivity.this, NearbyClinicActivity.class);
                 startActivity(intent);
             }
         });
