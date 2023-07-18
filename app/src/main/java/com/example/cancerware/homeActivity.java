@@ -18,7 +18,7 @@ public class homeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
@@ -29,7 +29,7 @@ public class homeActivity extends AppCompatActivity {
         imageView.setImageResource(imageResource);
 
         // Set the text for the homeActivity page
-        String text = "Welcome to the Skin Cancer DiagnosisActivity App!";
+        String text = "Welcome to CANCERWARE";
         textView.setText(text);
 
         // Set the button text for the homeActivity page
@@ -41,7 +41,7 @@ public class homeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the diagnosis process
-                Intent intent = new Intent(homeActivity.this, DiagnosisActivity.class);
+                Intent intent = new Intent(homeActivity.this, ScanActivity.class);
                 startActivity(intent);
             }
         });

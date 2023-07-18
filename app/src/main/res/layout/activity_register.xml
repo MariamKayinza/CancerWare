@@ -29,18 +29,17 @@
         android:layout_height="wrap_content"
         android:hint="Password" />
 
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register" />
-
     <TextView
         android:id="@+id/errorTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/registerButton"
         android:text="Please enter a username and password" />
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register" />
 
     <Button
         android:id="@+id/cancelButton"

@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:hint="Password" />
 
+
     <Button
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
