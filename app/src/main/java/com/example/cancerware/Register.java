@@ -14,6 +14,8 @@ public class Register extends AppCompatActivity {
     private EditText passwordEditText;
     private Button registerButton;
     private TextView errorTextView;
+    private Button cancelButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class Register extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         registerButton = findViewById(R.id.registerButton);
         errorTextView = findViewById(R.id.errorTextView);
+        cancelButton = findViewById(R.id.cancelButton);
 
         // Set the click listener for the register button
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +48,15 @@ public class Register extends AppCompatActivity {
                     Intent intent = new Intent(Register.this, Login.class);
                     startActivity(intent);
                 }
+            }
+        });
+
+        //for cancel button
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Register.this, home.class);
+                startActivity(intent);
             }
         });
     }
