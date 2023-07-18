@@ -39,7 +39,7 @@ public class NearbyClinicActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Find nearby clinics
-                Intent intent = new Intent(NearbyClinicActivity.this, NearbyClinicActivity.class);
+                Intent intent = new Intent(NearbyClinicActivity.this, ClinicInformationActivity.class);
                 startActivity(intent);
             }
         });

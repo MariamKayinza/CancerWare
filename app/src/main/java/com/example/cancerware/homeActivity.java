@@ -33,7 +33,7 @@ public class homeActivity extends AppCompatActivity {
         textView.setText(text);
 
         // Set the button text for the homeActivity page
-        String buttonText = "Start DiagnosisActivity";
+        String buttonText = "CHECK IF YOU HAVE SKIN CANCER";
         button.setText(buttonText);
 
         // Set the button listener for the homeActivity page
