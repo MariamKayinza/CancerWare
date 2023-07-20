@@ -60,6 +60,30 @@
                 android:text="Classify"
                 android:layout_marginHorizontal="10dp"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/diagnosis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Sample Diagnosis"
+                android:textColor="@color/orange_400"
+                android:textSize="20sp" />
+            <TextView
+                android:id="@+id/confidence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Sample Confidence"
+                android:textColor="@color/orange_400"
+                android:textSize="20sp" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
 </FrameLayout>

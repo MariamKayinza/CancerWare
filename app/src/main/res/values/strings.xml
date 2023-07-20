@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">CancerWare</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="searchbar_hint">Your search hint text here</string>
+    <string name="searchbar_scrolling_view_behavior">com.example.CancerWare.ScrollingViewBehavior</string>
 </resources>
