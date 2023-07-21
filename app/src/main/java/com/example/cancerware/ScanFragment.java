@@ -140,56 +140,62 @@ public class ScanFragment extends Fragment {
 
 
     private void classifyDisease() {
+        TensorImage resizedImage;
         try {
+
             Finalmodel model = Finalmodel.newInstance(requireContext());
 
-            // Initialize the ByteBuffer
-            int bufferSize = 1 * 224 * 224 * 3 * 4; // 1 image (224x224 pixels with 3 channels) * 4 bytes per float
-            byteBuffer = ByteBuffer.allocateDirect(bufferSize);
-            byteBuffer.order(ByteOrder.nativeOrder()); // Set the byte order if needed (e.g., ByteOrder.LITTLE_ENDIAN)
+            // Create the TensorImage from the bitmap
+            TensorImage tensorImage = new TensorImage(DataType.FLOAT32);
+            tensorImage.load(bitmap);
 
-            // Creates inputs for reference.
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
-            inputFeature0.loadBuffer(byteBuffer);
+            // Resize the image to the model's input size
+            int imageWidth = 224;
+            int imageHeight = 224;
+            resizedImage = tensorImage.resize(new TensorShape(1, imageWidth, imageHeight, 3));
+
+        // Convert the resized TensorImage to a TensorBuffer
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, imageWidth, imageHeight, 3}, DataType.FLOAT32);
+            resizedImage.loadBuffer(inputFeature0);
 
 
-            if (bitmap != null) {
-                bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
-                inputFeature0.loadBuffer(TensorImage.fromBitmap(bitmap).getBuffer());
+        if (bitmap != null) {
+            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
 
-                // Runs model inference and gets result.
-                Finalmodel.Outputs outputs = model.process(inputFeature0);
-                TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+            // Runs model inference and gets result.
+            Finalmodel.Outputs outputs = model.process(inputFeature0);
+            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
-                float[] probabilities = outputFeature0.getFloatArray();
-                float sum = 0.0f;
-                for (float probability : probabilities) {
-                    sum += probability;
-                }
-                for (int i = 0; i < probabilities.length; i++) {
-                    probabilities[i] = probabilities[i] / sum;
-                }
-
-                // Get the predicted class index and confidence
-                int predictedClassIndex = getMax(outputFeature0.getFloatArray());
-                float confidenceValue = probabilities[predictedClassIndex] * 100;
-
-                // Get the diagnosis text for the predicted class
-                String diagnosisText = getDiagnosisText(predictedClassIndex);
-
-                // Display the result and confidence
-                diagnosis.setText(diagnosisText);
-                confidence.setText(String.format("%.2f", confidenceValue));
-
-                // Release model resources if no longer used.
-                int diagnosisIndex = getMax(outputFeature0.getFloatArray());
-                diagnosis.setText(diagnosisText);
-                model.close();
-            } else {
-                Toast.makeText(requireActivity(), "No Image seleted", Toast.LENGTH_SHORT).show();
+            float[] probabilities = outputFeature0.getFloatArray();
+            float sum = 0.0f;
+            for (float probability : probabilities) {
+                sum += probability;
+            }
+            for (int i = 0; i < probabilities.length; i++) {
+                probabilities[i] = probabilities[i] / sum;
             }
 
-        } catch (IOException e) {
+            // Get the predicted class index and confidence
+            int predictedClassIndex = getMax(outputFeature0.getFloatArray());
+            float confidenceValue = probabilities[predictedClassIndex] * 100;
+
+            // Get the diagnosis text for the predicted class
+            String diagnosisText = getDiagnosisText(predictedClassIndex);
+
+            // Display the result and confidence
+            diagnosis.setText(diagnosisText);
+            confidence.setText(String.format("%.2f", confidenceValue));
+
+            // Release model resources if no longer used.
+            int diagnosisIndex = getMax(outputFeature0.getFloatArray());
+            diagnosis.setText(diagnosisText);
+            model.close();
+        } else {
+            Toast.makeText(requireActivity(), "No Image seleted", Toast.LENGTH_SHORT).show();
+        }
+
+    } catch (IOException e) {
             // TODO Handle the exception
         }
     }
@@ -261,8 +267,6 @@ public class ScanFragment extends Fragment {
                 bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), uri);
                 idimageView.setImageBitmap(bitmap);
 
-                // After obtaining the bitmap, create the ByteBuffer for the model input
-                byteBuffer = convertBitmapToByteBuffer(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -271,8 +275,6 @@ public class ScanFragment extends Fragment {
                 bitmap = (Bitmap) data.getExtras().get("data");
                 idimageView.setImageBitmap(bitmap);
 
-                // After obtaining the bitmap, create the ByteBuffer for the model input
-                byteBuffer = convertBitmapToByteBuffer(bitmap);
 
             }
             else {
@@ -280,29 +282,4 @@ public class ScanFragment extends Fragment {
             }
             super.onActivityResult(requestCode, resultCode, data);
         }
-    private ByteBuffer convertBitmapToByteBuffer(Bitmap bitmap) {
-        int BATCH_SIZE = 1;
-        int inputSize = 224;
-        int PIXEL_SIZE = 3; // For RGB
-        int bufferSize = BATCH_SIZE * inputSize * inputSize * PIXEL_SIZE * 4;
-
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(bufferSize);
-        byteBuffer.order(ByteOrder.nativeOrder());
-
-        bitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, true);
-        int[] pixels = new int[inputSize * inputSize];
-        bitmap.getPixels(pixels, 0, inputSize, 0, 0, inputSize, inputSize);
-
-        int pixel = 0;
-        for (int i = 0; i < inputSize; i++) {
-            for (int j = 0; j < inputSize; j++) {
-                int pixelValue = pixels[pixel++];
-                byteBuffer.putFloat(((pixelValue >> 16) & 0xFF)/ 255.0f); // Red component
-                byteBuffer.putFloat(((pixelValue >> 8) & 0xFF) /255.0f);  // Green component
-                byteBuffer.putFloat((pixelValue & 0xFF) /255.0f);         // Blue component
-            }
-        }
-
-        return byteBuffer;
-    }
 }

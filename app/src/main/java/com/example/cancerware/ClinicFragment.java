@@ -1,9 +1,21 @@
 package com.example.cancerware;
 
 import android.os.Bundle;
+import android.Manifest;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 import androidx.fragment.app.Fragment;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +25,9 @@ import android.view.ViewGroup;
  * Use the {@link ClinicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ClinicFragment extends Fragment {
+public class ClinicFragment extends Fragment  implements OnMapReadyCallback {
+
+    private GoogleMap googleMap;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +73,40 @@ public class ClinicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_clinic, container, false);
+        View view = inflater.inflate(R.layout.fragment_clinic, container, false);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        return view;
+        // return inflater.inflate(R.layout.fragment_clinic, container, false);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+
+        // Set up the map settings as needed (e.g., enable/disable features, set initial position)
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // Check for location permission and enable My Location button
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+        } else {
+            // Request location permission from the user if not granted
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+        // Add markers or other map manipulations as needed
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.0, 10.0))
+                .title("Marker"));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10.0, 10.0), 10));
+
     }
 }

@@ -4,45 +4,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ClinicFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"/>
 
-        <!-- NestedScrollingChild goes here (NestedScrollView, RecyclerView, etc.). -->
-        <androidx.core.widget.NestedScrollView
+<!--        <fragment-->
+<!--            android:id="@+id/map"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:name="com.google.android.gms.maps.SupportMapFragment"-->
+<!--            />-->
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/searchbar_scrolling_view_behavior">
-            <!-- Screen content goes here. -->
+            android:layout_height="wrap_content"
+            android:text="clinic" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="clinic" />
-
-        </androidx.core.widget.NestedScrollView>
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/searchbar_hint" />
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.search.SearchView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/searchbar_hint"
-            app:layout_anchor="@id/search_bar">
-            <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
-        </com.google.android.material.search.SearchView>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>
