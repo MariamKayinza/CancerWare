@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "442241889447",
+    "project_id": "cancerware-9bb2b",
+    "storage_bucket": "cancerware-9bb2b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442241889447:android:cc05fbf6f4acdbcb1c5782",
+        "android_client_info": {
+          "package_name": "com.example.cancerware"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442241889447-rl7iigr1ej2ndf4f5b7o1def0vj28c0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb_dUisiHcmJKPhiiQH4QfLRU5Sv_bVEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442241889447-ggo7v9ms7gi93llhfv1rp7sd3jen2u01.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

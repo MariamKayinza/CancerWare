@@ -28,66 +28,26 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.cancerware.ml.Finalmodel;
+import com.example.cancerware.ml.Model;
+
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ScanFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ScanFragment extends Fragment {
     private ImageButton cameraBtn, galleryBtn;
     private Button idclassfybtn;
     private ImageView idimageView;
-    private TextView diagnosis, confidence;
+    private TextView diagnosis, confidence, extraconfidence;
     private Bitmap bitmap;
     private ByteBuffer byteBuffer;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ScanFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ScanFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ScanFragment newInstance(String param1, String param2) {
-        ScanFragment fragment = new ScanFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,7 +61,7 @@ public class ScanFragment extends Fragment {
         diagnosis = view.findViewById(R.id.diagnosis);
         idimageView = view.findViewById(R.id.idimageview);
         confidence = view.findViewById(R.id.confidence);
-
+        extraconfidence = view.findViewById(R.id.extraconfidence);
 
         galleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +91,7 @@ public class ScanFragment extends Fragment {
             public void onClick(View view) {
 
                 diagnosis.setText("");
-                classifyDisease();
+                classfyDisease();
             }
         });
 
@@ -139,92 +99,85 @@ public class ScanFragment extends Fragment {
     }
 
 
-    private void classifyDisease() {
-        TensorImage resizedImage;
+    void classfyDisease(){
         try {
+            Model model = Model.newInstance(getContext().getApplicationContext());
 
-            Finalmodel model = Finalmodel.newInstance(requireContext());
+            // Creates inputs for reference.
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.UINT8);
 
-            // Create the TensorImage from the bitmap
-            TensorImage tensorImage = new TensorImage(DataType.FLOAT32);
-            tensorImage.load(bitmap);
+            if (bitmap != null){
+                bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+                inputFeature0.loadBuffer(TensorImage.fromBitmap(bitmap).getBuffer());
+                // Runs model inference and gets result.
+                Model.Outputs outputs = model.process(inputFeature0);
+                TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
-            // Resize the image to the model's input size
-            int imageWidth = 224;
-            int imageHeight = 224;
-            resizedImage = tensorImage.resize(new TensorShape(1, imageWidth, imageHeight, 3));
+                // Normalize the probabilities
+                float[] probabilities = outputFeature0.getFloatArray();
+                float sum = 0.0f;
+                for (float probability : probabilities) {
+                    sum += probability;
+                }
+                for (int i = 0; i < probabilities.length; i++) {
+                    probabilities[i] = probabilities[i] / sum;
+                }
 
-        // Convert the resized TensorImage to a TensorBuffer
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, imageWidth, imageHeight, 3}, DataType.FLOAT32);
-            resizedImage.loadBuffer(inputFeature0);
+                // Output the confidence values for each class or value
+                StringBuilder confidenceBuilder = new StringBuilder();
+                for (int i = 0; i < probabilities.length; i++) {
+                    String className = getClassNameForIndex(i);
+                    float confidence = probabilities[i] * 100;
+                    String confidenceString = String.format("%.2f", confidence);
+                    confidenceBuilder.append(className).append(": ").append(confidenceString).append("%\n");
+                    System.out.println(className + ": " + confidenceString + "%");
+                }
 
+                extraconfidence.setVisibility(View.VISIBLE);
+                extraconfidence.setText(confidenceBuilder.toString());
 
-        if (bitmap != null) {
-            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-            bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+                // Releases model resources if no longer used.
+                int results = getMax(outputFeature0.getFloatArray());
+                if (results == 0){
+                    diagnosis.setText("Skin Cancer");
+                    confidence.setText(String.format("%.2f", probabilities[results] * 100));
 
-            // Runs model inference and gets result.
-            Finalmodel.Outputs outputs = model.process(inputFeature0);
-            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+                } else if(results == 1) {
+                    diagnosis.setText("Not Skin Cancer");
+                    confidence.setText(String.format("%.2f", probabilities[results] * 100));
 
-            float[] probabilities = outputFeature0.getFloatArray();
-            float sum = 0.0f;
-            for (float probability : probabilities) {
-                sum += probability;
+                }else if(results == 2){
+                    diagnosis.setText("Unknown");
+                    confidence.setText(String.format("%.2f", probabilities[results] * 100));
+                }else{
+                    Toast.makeText(getContext(), "Error !", Toast.LENGTH_SHORT).show();
+                }
+                model.close();
+
+            }else{
+                Toast.makeText(getContext(), "No Image selected", Toast.LENGTH_SHORT).show();
             }
-            for (int i = 0; i < probabilities.length; i++) {
-                probabilities[i] = probabilities[i] / sum;
-            }
 
-            // Get the predicted class index and confidence
-            int predictedClassIndex = getMax(outputFeature0.getFloatArray());
-            float confidenceValue = probabilities[predictedClassIndex] * 100;
-
-            // Get the diagnosis text for the predicted class
-            String diagnosisText = getDiagnosisText(predictedClassIndex);
-
-            // Display the result and confidence
-            diagnosis.setText(diagnosisText);
-            confidence.setText(String.format("%.2f", confidenceValue));
-
-            // Release model resources if no longer used.
-            int diagnosisIndex = getMax(outputFeature0.getFloatArray());
-            diagnosis.setText(diagnosisText);
-            model.close();
-        } else {
-            Toast.makeText(requireActivity(), "No Image seleted", Toast.LENGTH_SHORT).show();
-        }
-
-    } catch (IOException e) {
+        } catch (IOException e) {
             // TODO Handle the exception
         }
+
     }
+    private String getClassNameForIndex(int index) {
+        // Implement your logic to map index to class name
+        // Return the class name corresponding to the index
 
-    public String getDiagnosisText(int diagnosisIndex) {
-        switch (diagnosisIndex) {
+        // Example:
+        switch (index) {
             case 0:
-
                 return "Actinic Keratosis - Cancer Absent";
             case 1:
                 return "Basal Cell Carcinoma - Cancer Infected";
-            case 2:
-                return "Dermatofibroma - Cancer Absent";
-            case 3:
-                return "Melanoma - Cancer Infected";
-            case 4:
-                return "Nevus - Cancer Absent";
-            case 5:
-                return "Pigmented Benign Keratosis - Cancer Absent";
-            case 6:
-                return "Seborrheic Keratosis - Cancer Absent";
-            case 7:
-                return "Squamous Cell Carinoma - Cancer Infected";
-            case 8:
-                return "Vascular Lesion- Cancer Absent";
             default:
                 return "Unknown Diagnosis";
         }
     }
+
 
     private int getMax(float[] arr) {
         int max = 0;
@@ -235,51 +188,60 @@ public class ScanFragment extends Fragment {
     }
 
 
-    private void getPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Check for the camera permission being granted
+    void getPermission() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            // Check if the camera permission is granted
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                // Requesting the camera permission
+                // Request the camera permission
                 ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 11);
             }
         }
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 10) {
+            if (data != null) {
+                Uri uri = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), uri);
+                    idimageView.setImageBitmap(bitmap);
+//                    ImageUri = uri;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (requestCode == 12) {
+            if (resultCode == Activity.RESULT_OK) {
+                // The image was captured successfully
+                bitmap = (Bitmap) data.getExtras().get("data");
+                idimageView.setImageBitmap(bitmap);
+                Uri imageUri = getImageUriFromBitmap(bitmap);
+                // Continue with further processing of the captured image
+            } else {
+                // Image capture was canceled or failed
+                // Handle the error or show a message to the user
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 11) {
-            if (grantResults.length > 0) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == 11){
+            if(grantResults.length>0){
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     this.getPermission();
-                } else {
-                    Toast.makeText(requireContext(), "Camera permission denied. Cancerware cannot use the camera.", Toast.LENGTH_SHORT).show();
                 }
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 10 && data != null) {
-            Uri uri = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), uri);
-                idimageView.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if (requestCode == 12 && resultCode == Activity.RESULT_OK && data != null) {
-                bitmap = (Bitmap) data.getExtras().get("data");
-                idimageView.setImageBitmap(bitmap);
-
-
-            }
-            else {
-                Toast.makeText(requireActivity(), "Image capture cancelled or failed.", Toast.LENGTH_SHORT).show();
-            }
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+    private Uri getImageUriFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(requireActivity().getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+    }
 }

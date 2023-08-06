@@ -82,6 +82,14 @@
                 android:text="Sample Confidence"
                 android:textColor="@color/orange_400"
                 android:textSize="20sp" />
+            <TextView
+                android:id="@+id/extraconfidence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Extra Confidence"
+                android:textColor="@color/orange_400"
+                android:textSize="20sp" />
         </LinearLayout>
 
     </LinearLayout>

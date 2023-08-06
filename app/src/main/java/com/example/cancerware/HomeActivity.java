@@ -28,21 +28,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.home:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new HomeFragment())
-                        .commit();
-                return true;
-
-            case R.id.scan:
-                getSupportFragmentManager()
-                        .beginTransaction()
                         .replace(R.id.flFragment, new ScanFragment())
-                        .commit();
-                return true;
-
-            case R.id.location:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.flFragment, new ClinicFragment())
                         .commit();
                 return true;
 

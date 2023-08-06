@@ -8,22 +8,43 @@
     tools:context=".ClinicFragment">
 
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+<!--    <com.google.android.gms.maps.MapView-->
+<!--        android:id="@+id/map"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"/>-->
 
-<!--        <fragment-->
-<!--            android:id="@+id/map"-->
+
+<!--        <TextView-->
 <!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:name="com.google.android.gms.maps.SupportMapFragment"-->
-<!--            />-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="clinic" />-->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/button_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Locate Hospital Around You" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/text_location"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="clinic" />
+            android:layout_below="@id/button_location"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="Location will be displayed here"
+            android:textSize="18sp" />
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
 
 </FrameLayout>

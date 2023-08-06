@@ -2,4 +2,5 @@
     <string name="app_name">CancerWare</string>
     <string name="searchbar_hint">Your search hint text here</string>
     <string name="searchbar_scrolling_view_behavior">com.example.CancerWare.ScrollingViewBehavior</string>
+    <string name="google_maps_key">"AIzaSyA2wE10soWmWXt-LZlPC3pU7V5bcGWOpTs"</string>
 </resources>
