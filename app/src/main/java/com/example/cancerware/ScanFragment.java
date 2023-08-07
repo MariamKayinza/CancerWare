@@ -83,6 +83,7 @@ public class ScanFragment extends Fragment {
                 startActivityForResult(intent, 12);
                 diagnosis.setText("");
                 confidence.setText("");
+                extraconfidence.setText("");
             }
         });
 
@@ -170,9 +171,9 @@ public class ScanFragment extends Fragment {
         // Example:
         switch (index) {
             case 0:
-                return "Actinic Keratosis - Cancer Absent";
+                return "Skin Cancer Infected";
             case 1:
-                return "Basal Cell Carcinoma - Cancer Infected";
+                return "Skin Cancer Absent";
             default:
                 return "Unknown Diagnosis";
         }
